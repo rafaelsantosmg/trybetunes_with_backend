@@ -1,0 +1,32 @@
+version: '3.1'
+services:
+  mysql:
+    image: mysql:5.7
+    container_name: trybetunes_mysql
+    restart: always
+    env_file:
+      - ./.env
+    environment:
+      - MYSQL_ROOT_PASSWORD=$MYSQL_PASSWORD
+    ports:
+      - $DB_PORT:3306
+    volumes:
+      - .:/app/db
+    working_dir: /app/db
+  api:
+    image: node:latest
+    container_name: trybetunes_api
+    restart: always
+    depends_on:
+      - mysql      
+    ports:
+      - $API_PORT:$API_PORT
+    environment:      
+      - MYSQL_DATABASE=$MYSQL_DATABASE
+      - MYSQL_USER=$MYSQL_USER
+      - MYSQL_PASSWORD=$MYSQL_PASSWORD
+      - HOSTNAME=mysql      
+    volumes:
+      - .:/app/api
+    working_dir: /app/api
+    command: bash -c "npm install && npm start"

@@ -1,4 +1,7 @@
 import React, { Component } from 'react';
+import { Redirect } from 'react-router-dom';
+import reservationAPI from '../services/userAPI';
+// import { readUser } from '../services/userAPI';
 import Header from '../components/Header';
 import Form from '../components/Form';
 import Loading from '../components/Loading';
@@ -16,9 +19,15 @@ export default class Search extends Component {
       albumName: '',
       listAlbum: [],
       notFoundAlbum: false,
+      redirect: false,
     };
     this.onChangeInput = this.onChangeInput.bind(this);
     this.handleSearch = this.handleSearch.bind(this);
+    this.getUser = this.getUser.bind(this);
+  }
+
+  componentDidMount() {
+    this.getUser();
   }
 
   async handleSearch(event) {
@@ -38,23 +47,36 @@ export default class Search extends Component {
   }
 
   onChangeInput({ target }) {
-    const { value } = target;
+    const { value, name } = target;
     const minLength = 2;
     this.setState(({
-      album: value,
+      [name]: value,
       isDisabledSearch: value.length < minLength,
     }
     ));
   }
 
+  async getUser() {
+    try {
+      // const { token } = readUser();
+      await reservationAPI.get('/auth', {});
+    } catch (error) {
+      console.log(error);
+      this.setState(({ redirect: true }));
+      global.alert(error.message);
+    }
+  }
+
   render() {
     const {
       state: {
+        album,
         albumName,
         isDisabledSearch,
         isLoading,
         listAlbum,
         notFoundAlbum,
+        redirect,
       },
       onChangeInput,
       handleSearch,
@@ -71,6 +93,8 @@ export default class Search extends Component {
             onSubmit={ handleSearch }
             isDisabled={ isDisabledSearch }
             onChangeInput={ onChangeInput }
+            value={ album }
+            isSearch
           >
             Buscar
           </Form>
@@ -84,6 +108,7 @@ export default class Search extends Component {
           { notFoundAlbum ? (<h2>Nenhum álbum foi encontrado</h2>)
             : (<LinksAlbum listAlbum={ listAlbum } />) }
         </div>
+        { redirect && (<Redirect to="/" />) }
       </div>
     );
   }

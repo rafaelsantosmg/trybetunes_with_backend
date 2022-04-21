@@ -6,26 +6,26 @@ import Button from './Button';
 export default class Form extends Component {
   render() {
     const { isDisabled, onChangeInput, onSubmit, title,
-      inputId, buttonId, placeholder, user } = this.props;
+      inputId, buttonId, placeholder, user, isSearch, value } = this.props;
     return (
       <form onSubmit={ onSubmit }>
         <div className="input-group mb-3">
           <span className="input-group-text" id="basic-addon1">{ title }</span>
           <Input
             id={ inputId }
-            name="name"
-            value={ user.name }
+            name={ isSearch ? 'album' : 'email' }
+            value={ isSearch ? value : user.email }
             placeholder={ placeholder }
             onChangeInput={ onChangeInput }
           />
-          <Input
+          { !isSearch && <Input
             id={ inputId }
             name="password"
             value={ user.password }
             type="password"
             placeholder="Senha"
             onChangeInput={ onChangeInput }
-          />
+          />}
           <Button
             id={ buttonId }
             isDisabled={ isDisabled }
@@ -47,7 +47,18 @@ Form.propTypes = {
   placeholder: propTypes.string.isRequired,
   title: propTypes.string.isRequired,
   user: propTypes.shape({
-    name: propTypes.string,
+    email: propTypes.string,
     password: propTypes.string,
-  }).isRequired,
+  }),
+  isSearch: propTypes.bool,
+  value: propTypes.string,
+};
+
+Form.defaultProps = {
+  user: {
+    email: '',
+    password: '',
+  },
+  isSearch: false,
+  value: '',
 };

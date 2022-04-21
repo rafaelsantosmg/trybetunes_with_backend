@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Redirect, Link } from 'react-router-dom';
-import { createUser } from '../services/userAPI';
+import reservationAPI, { saveUser } from '../services/userAPI';
 import Form from '../components/Form';
 import Loading from '../components/Loading';
 import './Login.css';
@@ -11,7 +11,7 @@ export default class Login extends Component {
     super();
     this.state = {
       user: {
-        name: '',
+        email: '',
         password: '',
       },
       isDisabled: true,
@@ -26,13 +26,14 @@ export default class Login extends Component {
     event.preventDefault();
     this.setState(({ isLoading: true }));
     const { user } = this.state;
-    const response = await createUser(user);
-    if (response === 'OK') return this.setState({ redirect: true, isLoading: false });
+    const response = await reservationAPI.post('/login', user);
+    console.log(response);
+    saveUser(response.data.user.userName, response.data.token);
+    if (response.data.token) return this.setState({ redirect: true, isLoading: false });
   }
 
   onChangeInput({ target }) {
     const { value, name } = target;
-    const minLength = 3;
     const minPassword = 6;
     this.setState((prevState) => ({
       user: {
@@ -40,8 +41,8 @@ export default class Login extends Component {
         [name]: value,
       },
     }), () => {
-      const { user: { name: userName, password } } = this.state;
-      if (userName.length > minLength && password.length >= minPassword) {
+      const { user: { email, password } } = this.state;
+      if (email.includes('@') && password.length >= minPassword) {
         this.setState(({ isDisabled: false }));
       }
     });

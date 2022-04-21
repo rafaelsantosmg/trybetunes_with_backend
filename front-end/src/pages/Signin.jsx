@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { Redirect } from 'react-router-dom';
+import reservationAPI from '../services/userAPI';
 import Input from '../components/Input';
 import Button from '../components/Button';
 import './Signin.css';
@@ -9,7 +10,7 @@ export default class Signin extends Component {
     super();
     this.state = {
       user: {
-        name: '',
+        userName: '',
         email: '',
         password: '',
       },
@@ -30,7 +31,7 @@ export default class Signin extends Component {
         [name]: value,
       },
     }), () => {
-      const { user: { name: userName, email, password } } = this.state;
+      const { user: { userName, email, password } } = this.state;
       if (userName.length > minLength
         && email.includes('@') && password.length >= minPassword) {
         this.setState(({ isDisabled: false }));
@@ -40,13 +41,18 @@ export default class Signin extends Component {
 
   async onSubmit(event) {
     event.preventDefault();
-    const { user } = this.state;
-    console.log(user);
-    if (user) return this.setState({ redirect: true });
+    try {
+      const { user } = this.state;
+      const response = await reservationAPI.post('/users', user);
+      console.log(response);
+      if (response) return this.setState({ redirect: true });
+    } catch (error) {
+      console.error(error);
+    }
   }
 
   render() {
-    const { user: { name, email, password }, isDisabled, redirect } = this.state;
+    const { user: { userName, email, password }, isDisabled, redirect } = this.state;
     return (
       <div className="signin-page">
         <form onSubmit={ this.onSubmit }>
@@ -54,8 +60,8 @@ export default class Signin extends Component {
             <span className="input-group-text" id="basic-addon1">Cadastro</span>
             <Input
               id="userName"
-              name="name"
-              value={ name }
+              name="userName"
+              value={ userName }
               placeholder="Nome de Usuário"
               onChangeInput={ this.onChangeInput }
             />
@@ -82,7 +88,7 @@ export default class Signin extends Component {
             </Button>
           </div>
         </form>
-        { redirect && (<Redirect to="/" />) }
+        { redirect && (<Redirect to="/search" />) }
       </div>
     );
   }

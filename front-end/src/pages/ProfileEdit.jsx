@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import propTypes from 'prop-types';
 import { Redirect } from 'react-router-dom';
-import { getUser, updateUser } from '../services/userAPI';
+// import { getUser, updateUser } from '../services/userAPI';
 import Header from '../components/Header';
 import Loading from '../components/Loading';
 
@@ -42,14 +42,14 @@ export default class ProfileEdit extends Component {
     this.setState({ submit: true });
   }
 
-  async handleUpdateUser() {
-    const { name, image, email, description } = this.state;
-    await updateUser({ name, image, email, description });
-  }
+  // async handleUpdateUser() {
+  //   const { name, image, email, description } = this.state;
+  //   // await updateUser({ name, image, email, description });
+  // }
 
   async getUserProfile() {
     this.setState({ isLoading: true }, async () => {
-      const response = await getUser();
+      // const response = await getUser();
       this.setState({
         name: response.name,
         image: response.image,

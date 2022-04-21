@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import propTypes from 'prop-types';
-import { getUser } from '../services/userAPI';
+import { readUser } from '../services/userAPI';
 import Loading from './Loading';
 import logoHeader from '../images/group-1.svg';
 import avatar from '../images/icon/default.png';
@@ -23,8 +23,8 @@ export default class Header extends Component {
 
   async handleUser() {
     this.setState(({ isLoading: true }));
-    const { name } = await getUser();
-    this.setState(({ user: name, isLoading: false }));
+    const { user } = readUser();
+    this.setState(({ user, isLoading: false }));
   }
 
   render() {

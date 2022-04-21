@@ -1,0 +1,12 @@
+.search {
+  margin: 20px auto;
+  width: 90%;
+}
+
+.cards {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  margin: 0 auto;
+  width: 100%;
+}

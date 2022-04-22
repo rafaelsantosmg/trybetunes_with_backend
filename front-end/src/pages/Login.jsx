@@ -14,6 +14,7 @@ export default class Login extends Component {
         email: '',
         password: '',
       },
+      error: '',
       isDisabled: true,
       isLoading: false,
       redirect: false,
@@ -24,12 +25,24 @@ export default class Login extends Component {
 
   async handleRedirect(event) {
     event.preventDefault();
-    this.setState(({ isLoading: true }));
-    const { user } = this.state;
-    const response = await reservationAPI.post('/login', user);
-    console.log(response);
-    saveUser(response.data.user.userName, response.data.token);
-    if (response.data.token) return this.setState({ redirect: true, isLoading: false });
+    const STATUS_CODE = 400;
+    try {
+      const { user } = this.state;
+
+      const response = await reservationAPI.post('/login', user);
+
+      this.setState(({ isLoading: true }));
+      saveUser(response.data.user.userName, response.data.token);
+      if (response.data.token) return this.setState({ redirect: true, isLoading: false });
+    } catch (error) {
+      if (error.response.status === STATUS_CODE) {
+        return this.setState({
+          redirect: false,
+          isLoading: false,
+          error: error.response.data.message,
+        });
+      }
+    }
   }
 
   onChangeInput({ target }) {
@@ -55,6 +68,7 @@ export default class Login extends Component {
         isDisabled,
         isLoading,
         redirect,
+        error,
       },
       onChangeInput,
       handleRedirect,
@@ -63,6 +77,7 @@ export default class Login extends Component {
     return (
       isLoading ? (<Loading />) : (
         <div className="login-page" data-testid="page-login">
+          <p>{error }</p>
           <figure>
             <img src={ logo } alt="Logo TrybeTunes" />
           </figure>
@@ -70,14 +85,14 @@ export default class Login extends Component {
             title="Usuário"
             inputId="login-name-input"
             buttonId="login-submit-button"
-            placeholder="Nome de Usuário"
+            placeholder="E-mail"
             onSubmit={ handleRedirect }
             isDisabled={ isDisabled }
             onChangeInput={ onChangeInput }
             user={ user }
           />
           <div><Link to="/Signin">SignIn</Link></div>
-          { redirect && (<Redirect to="/search" />) }
+          { redirect ? (<Redirect to="/search" />) : (<Redirect to="/" />) }
         </div>
       )
     );

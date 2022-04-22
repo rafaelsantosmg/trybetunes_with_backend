@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import { Redirect } from 'react-router-dom';
-import reservationAPI from '../services/userAPI';
-// import { readUser } from '../services/userAPI';
+import reservationAPI, { readUser } from '../services/userAPI';
 import Header from '../components/Header';
 import Form from '../components/Form';
 import Loading from '../components/Loading';
@@ -58,10 +57,15 @@ export default class Search extends Component {
 
   async getUser() {
     try {
-      // const { token } = readUser();
-      await reservationAPI.get('/auth', {});
+      const { token } = readUser();
+
+      await reservationAPI.get('/auth', {
+        headers: {
+          Authorization: token,
+        },
+      });
     } catch (error) {
-      console.log(error);
+      console.log(error.response);
       this.setState(({ redirect: true }));
       global.alert(error.message);
     }

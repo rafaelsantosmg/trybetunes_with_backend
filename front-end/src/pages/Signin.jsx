@@ -44,7 +44,6 @@ export default class Signin extends Component {
     try {
       const { user } = this.state;
       const response = await reservationAPI.post('/users', user);
-      console.log(response);
       if (response) return this.setState({ redirect: true });
     } catch (error) {
       console.error(error);

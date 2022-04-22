@@ -5,7 +5,7 @@ const error = require('../util/throwError');
 const login = async (email, password) => {
   const user = await User.findOne({
     where: { email, password },
-    attributes: { exclude: ['password']},
+    attributes: { exclude: ['password'] },
   });
 
   if (user === null || !user) {

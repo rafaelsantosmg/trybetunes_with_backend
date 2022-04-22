@@ -1,6 +1,15 @@
 const { User } = require('../database/models');
 const error = require('../util/throwError');
 
+const getUserForAuth = async (userEmail) => {
+  const user = await User.findOne({
+    where: { email: userEmail },
+    attributes: { exclude: ['password'] },
+  });
+
+  return user;
+};
+
 const create = async ({ userName, email, password }) => {
   const userExist = await User.findOne({ where: { email } });
 
@@ -13,4 +22,5 @@ const create = async ({ userName, email, password }) => {
 
 module.exports = {
   create,
+  getUserForAuth,
 };

@@ -11,11 +11,20 @@ const create = async (req, res) => {
 
 const update = async (req, res) => {
   const { userName, password, description, image } = req.body;
-  const { email, id } = req.data;
+  const { id } = req.params;
+
+  const { email } = req.data;
+
   const updateUser = await userService.update({
-    userName, password, description, image, email, id });
-  console.log(updateUser);
-}
+    userName,
+    password,
+    description,
+    image,
+    email,
+    id,
+  });
+  res.status(200).json(updateUser);
+};
 
 module.exports = {
   create,

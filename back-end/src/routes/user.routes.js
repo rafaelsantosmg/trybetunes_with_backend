@@ -5,6 +5,8 @@ const { authMiddleware } = require('../middlewares/AuthenticateMiddleware');
 const validateJoi = require('../middlewares/validateJoi');
 const { validateUser, validateUpdateUser } = require('../schemas/schemaJoi');
 
+routes.get('/', authMiddleware, rescue(userController.getAll));
+routes.get('/:id', authMiddleware, rescue(userController.getById));
 routes.post('/', validateJoi(validateUser), rescue(userController.create));
 routes.put(
   '/:id',

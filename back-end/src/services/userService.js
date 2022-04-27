@@ -1,5 +1,19 @@
 const { User } = require('../database/models');
+const throwError = require('../util/throwError');
 const error = require('../util/throwError');
+
+const getAll = async () => {
+  const users = await User.findAll();
+
+  return users;
+};
+
+const getById = async (id) => {
+  const user = await User.findByPk(id);
+  if (!user) throw throwError(404, 'User not foud');
+
+  return user;
+};
 
 const getUserForAuth = async (userEmail) => {
   const user = await User.findOne({
@@ -25,14 +39,14 @@ const update = async ({ userName, password, description, image, email, id }) => 
 
   if (!userExist) throw error(404, 'User not found!');
 
-  const user = await User.update({ userName, password, description, image },
-    { where: { id }});
+  await User.update({ userName, password, description, image }, { where: { id } });
 
-  return user;
+  return { id, userName, email, description, image };
 };
 
-
 module.exports = {
+  getAll,
+  getById,
   create,
   getUserForAuth,
   update,

@@ -9,6 +9,15 @@ const create = async (req, res) => {
   return res.status(201).json(token);
 };
 
+const update = async (req, res) => {
+  const { userName, password, description, image } = req.body;
+  const { email, id } = req.data;
+  const updateUser = await userService.update({
+    userName, password, description, image, email, id });
+  console.log(updateUser);
+}
+
 module.exports = {
   create,
+  update,
 };

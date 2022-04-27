@@ -20,7 +20,20 @@ const create = async ({ userName, email, password }) => {
   return user;
 };
 
+const update = async ({ userName, password, description, image, email, id }) => {
+  const userExist = await User.findOne({ where: { email } });
+
+  if (!userExist) throw error(404, 'User not found!');
+
+  const user = await User.update({ userName, password, description, image },
+    { where: { id }});
+
+  return user;
+};
+
+
 module.exports = {
   create,
   getUserForAuth,
+  update,
 };

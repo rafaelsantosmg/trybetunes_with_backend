@@ -1,8 +1,7 @@
-import React, { Component } from 'react';
+import React from 'react';
 import propTypes from 'prop-types';
 
-export default class Input extends Component {
-  render() {
+export default function Input() {
     const { id, onChangeInput, placeholder, type, name, value } = this.props;
     return (
       <input
@@ -17,7 +16,6 @@ export default class Input extends Component {
         onChange={ onChangeInput }
       />
     );
-  }
 }
 
 Input.propTypes = {

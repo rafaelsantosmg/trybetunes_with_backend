@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { useState, useEffect } from 'react';
 import propTypes from 'prop-types';
 import { readUser } from '../services/userAPI';
 import Loading from './Loading';
@@ -7,29 +7,20 @@ import avatar from '../images/icon/default.png';
 import Menu from './Menu';
 import './Header.css';
 
-export default class Header extends Component {
-  constructor() {
-    super();
-    this.state = {
-      user: '',
-      isLoading: false,
-    };
-    this.handleUser = this.handleUser.bind(this);
-  }
+export default function Header({ active }) {
+  const [user, setUser] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
+ 
+  useEffect(() => {
+    const handleUser = async () => {
+      setIsLoading(true );
+      const { user } = readUser();
+      setUser(user);
+      setIsLoading(false);
+    }
+    handleUser();
+  }, [])
 
-  componentDidMount() {
-    this.handleUser();
-  }
-
-  async handleUser() {
-    this.setState(({ isLoading: true }));
-    const { user } = readUser();
-    this.setState(({ user, isLoading: false }));
-  }
-
-  render() {
-    const { user, isLoading } = this.state;
-    const { active } = this.props;
     return (
       isLoading ? (<Loading />) : (
         <header className="header" data-testid="header-component">
@@ -52,7 +43,6 @@ export default class Header extends Component {
         </header>
       )
     );
-  }
 }
 
 Header.propTypes = {

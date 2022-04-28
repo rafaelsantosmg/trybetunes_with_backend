@@ -1,9 +1,8 @@
-import React, { Component } from 'react';
+import React from 'react';
 import propTypes from 'prop-types';
 
-export default class Checkbox extends Component {
-  render() {
-    const { id, dataId, onChange, isChecked } = this.props;
+export default function Checkbox ({ id, dataId, onChange, isChecked }) {
+   
     return (
       <div className="form-check">
         <label className="form-check-label" htmlFor={ id }>
@@ -20,7 +19,6 @@ export default class Checkbox extends Component {
         </label>
       </div>
     );
-  }
 }
 
 Checkbox.propTypes = {

@@ -1,9 +1,8 @@
-import React, { Component } from 'react';
+import React from 'react';
 import propTypes from 'prop-types';
 
-export default class Button extends Component {
-  render() {
-    const { children, id, isDisabled } = this.props;
+export default function Button({ children, id, isDisabled }) {
+   
     return (
       <button
         data-testid={ id }
@@ -14,7 +13,6 @@ export default class Button extends Component {
         { children }
       </button>
     );
-  }
 }
 
 Button.propTypes = {

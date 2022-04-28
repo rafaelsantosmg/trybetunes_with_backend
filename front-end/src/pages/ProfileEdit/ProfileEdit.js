@@ -2,8 +2,8 @@ import React, { Component } from 'react';
 import propTypes from 'prop-types';
 import { Redirect } from 'react-router-dom';
 // import { getUser, updateUser } from '../services/userAPI';
-import Header from '../components/Header';
-import Loading from '../components/Loading';
+import Header from '../../components/Header/Header';
+import Loading from '../../components/Loading/Loading';
 
 export default class ProfileEdit extends Component {
   constructor() {

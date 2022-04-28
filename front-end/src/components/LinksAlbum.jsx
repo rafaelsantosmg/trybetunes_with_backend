@@ -1,29 +1,26 @@
-import React, { Component } from 'react';
+import React from 'react';
 import propTypes, { shape } from 'prop-types';
 import { Link } from 'react-router-dom';
 import './LinksAlbum.css';
 
-export default class CardAlbum extends Component {
-  render() {
-    const { listAlbum } = this.props;
-    return (
-      listAlbum.map((album) => (
-        <div className="card" key={ album.collectionId }>
-          <Link
-            className="nav-link"
-            data-testid={ `link-to-album-${album.collectionId}` }
-            to={ `/album/${album.collectionId}` }
-          >
-            <p>{ album.artistName }</p>
-            <p>{ album.collectionName }</p>
-            <figure>
-              <img src={ album.artworkUrl100 } alt={ album.artistName } />
-            </figure>
-          </Link>
-        </div>
-      ))
-    );
-  }
+export default function CardAlbum({ listAlbum }) {
+  return (
+    listAlbum.map((album) => (
+      <div className="card" key={ album.collectionId }>
+        <Link
+          className="nav-link"
+          data-testid={ `link-to-album-${album.collectionId}` }
+          to={ `/album/${album.collectionId}` }
+        >
+          <p>{ album.artistName }</p>
+          <p>{ album.collectionName }</p>
+          <figure>
+            <img src={ album.artworkUrl100 } alt={ album.artistName } />
+          </figure>
+        </Link>
+      </div>
+    ))
+  );
 }
 
 CardAlbum.propTypes = {

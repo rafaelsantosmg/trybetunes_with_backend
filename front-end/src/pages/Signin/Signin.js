@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import { Redirect } from 'react-router-dom';
-import reservationAPI from '../services/userAPI';
-import Input from '../components/Input';
-import Button from '../components/Button';
+import reservationAPI from '../../services/userAPI';
+import Input from '../../components/Input/Input';
+import Button from '../../components/Button/Button';
 import './Signin.css';
 
 export default class Signin extends Component {

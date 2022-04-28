@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
-import Header from '../Header/Header';
-import MusicCard from '../MusicCard/MusicCard';
+import Header from '../../components/Header/Header';
+import MusicCard from '../../components/MusicCard/MusicCard';
 import getMusics from '../../services/musicsAPI';
 
 import './Album.css';

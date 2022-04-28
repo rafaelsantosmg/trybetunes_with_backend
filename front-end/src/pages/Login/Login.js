@@ -1,10 +1,9 @@
 import React, { Component } from 'react';
 import { Redirect, Link } from 'react-router-dom';
-import reservationAPI, { saveUser } from '../services/userAPI';
-import Form from '../components/Form';
-import Loading from '../components/Loading';
+import reservationAPI, { saveUser } from '../../services/userAPI';
+import Loading from '../../components/Loading/Loading';
 import './Login.css';
-import logo from '../images/img_login.svg';
+import logo from '../../images/img_login.svg';
 
 export default class Login extends Component {
   constructor() {
@@ -81,7 +80,13 @@ export default class Login extends Component {
           <figure>
             <img src={ logo } alt="Logo TrybeTunes" />
           </figure>
-          <Form
+          <form onSubmit={ handleRedirect }>
+            <label htmlFor="login-name-input">
+              <input type="text" id="login-name-input" onChange={ onChangeInput } />
+            </label>
+
+          </form>
+          {/* <Form
             title="Usuário"
             inputId="login-name-input"
             buttonId="login-submit-button"
@@ -90,7 +95,7 @@ export default class Login extends Component {
             isDisabled={ isDisabled }
             onChangeInput={ onChangeInput }
             user={ user }
-          />
+          /> */}
           <div><Link to="/Signin">SignIn</Link></div>
           { redirect ? (<Redirect to="/search" />) : (<Redirect to="/" />) }
         </div>

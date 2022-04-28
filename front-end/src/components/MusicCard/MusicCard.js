@@ -1,80 +1,63 @@
-import React, { Component } from 'react';
+import React, { useEffect, useState } from 'react';
 import propTypes from 'prop-types';
-import Checkbox from './Checkbox';
-import { addSong, getFavoriteSongs, removeSong } from '../services/favoriteSongsAPI';
-import Loading from './Loading';
+import Checkbox from '../CheckBox/Checkbox';
+import { addSong, getFavoriteSongs, removeSong } from '../../services/favoriteSongsAPI';
+import Loading from '../Loading/Loading';
 import './MusicCard.css';
 
-export default class MusicCard extends Component {
-  constructor() {
-    super();
-    this.state = {
-      isLoading: false,
-      isChecked: false,
+export default function MusicCard({ music, removeSongFavorite }) {
+  const [isLoading, setIsLoading] = useState(false);
+  const [isChecked, setIsChecked] = useState(false);
+
+  useEffect(() => {
+    const getFavoriteMusic = async () => {
+      const favorites = await getFavoriteSongs();
+      setIsLoading({
+        isChecked: favorites.some((favorite) => music.trackId === favorite.trackId),
+      });
     };
-    this.handleSaveFavorites = this.handleSaveFavorites.bind(this);
-    this.getFavoriteMusic = this.getFavoriteMusic.bind(this);
-  }
+    getFavoriteMusic();
+  }, [music.trackId]);
 
-  componentDidMount() {
-    this.getFavoriteMusic();
-  }
-
-  async handleSaveFavorites({ target }) {
-    const { music, removeSongFavorite } = this.props;
+  const handleSaveFavorites = async ({ target }) => {
     const { checked } = target;
-    this.setState({ isLoading: true }, async () => {
-      if (checked) {
-        await addSong(music);
-        this.setState({
-          isChecked: true,
-          isLoading: false,
-        });
-      } else {
-        await removeSong(music);
-        await removeSongFavorite();
-        this.setState({
-          isLoading: false,
-          isChecked: false,
-        });
-      }
-    });
-  }
+    setIsLoading(true);
 
-  async getFavoriteMusic() {
-    const { music } = this.props;
-    const favorites = await getFavoriteSongs();
-    this.setState({
-      isChecked: favorites.some((favorite) => music.trackId === favorite.trackId),
-    });
-  }
+    if (checked) {
+      await addSong(music);
+      setIsChecked(true);
+      setIsLoading(false);
+    } else {
+      await removeSong(music);
+      await removeSongFavorite();
 
-  render() {
-    const { music } = this.props;
-    const { isLoading, isChecked } = this.state;
-    return (
-      <div className="music-card">
-        { isLoading ? (<Loading />) : (
-          <div className="music-track">
-            <p>{ music.trackName }</p>
-            <audio
-              data-testid="audio-component"
-              src={ music.previewUrl }
-              controls
-            >
-              <track kind="captions" />
-            </audio>
-            <Checkbox
-              id={ music.trackId }
-              dataId={ `checkbox-music-${music.trackId}` }
-              onChange={ this.handleSaveFavorites }
-              isChecked={ isChecked }
-            />
-          </div>
-        ) }
-      </div>
-    );
-  }
+      setIsLoading(false);
+      isChecked(false);
+    }
+  };
+
+  return (
+    <div className="music-card">
+      { isLoading ? (<Loading />) : (
+        <div className="music-track">
+          <p>{ music.trackName }</p>
+          <audio
+            data-testid="audio-component"
+            src={ music.previewUrl }
+            controls
+          >
+            <track kind="captions" />
+          </audio>
+          <Checkbox
+            id={ music.trackId }
+            dataId={ `checkbox-music-${music.trackId}` }
+            onChange={ handleSaveFavorites }
+            isChecked={ isChecked }
+          />
+        </div>
+      ) }
+    </div>
+  );
 }
 
 MusicCard.propTypes = {

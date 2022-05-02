@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Link, useHistory } from 'react-router-dom';
-import reservationAPI, { saveUser } from '../../services/userAPI';
+import userAPI, { saveUser } from '../../services/userAPI';
 import './Login.css';
 import logo from '../../images/img_login.svg';
 import Input from '../../components/Input/Input';
@@ -23,8 +23,9 @@ export default function Login() {
     event.preventDefault();
     const STATUS_CODE = 400;
     try {
-      const response = await reservationAPI.post('/login', user);
-      saveUser(response.data.user.userName, response.data.token);
+      const response = await userAPI.post('/login', user);
+      console.log(response);
+      saveUser(response.data.user.id, response.data.user.userName, response.data.token);
       if (response.data.token) return history.push('/search');
     } catch (err) {
       if (err.response.status === STATUS_CODE) {

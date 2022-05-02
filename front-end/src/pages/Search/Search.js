@@ -1,11 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import { Redirect } from 'react-router-dom';
-import reservationAPI, { readUser } from '../../services/userAPI';
+import userAPI, { readUser } from '../../services/userAPI';
 import Header from '../../components/Header/Header';
 import Loading from '../../components/Loading/Loading';
 import LinksAlbum from '../../components/LinksAlbum';
 import searchAlbumsAPI from '../../services/searchAlbumsAPI';
 import './Search.css';
+import Input from '../../components/Input/Input';
+import Button from '../../components/Button/Button';
 
 export default function Search() {
   const [album, setAlbum] = useState('');
@@ -21,7 +23,7 @@ export default function Search() {
       try {
         const { token } = readUser();
 
-        await reservationAPI.get('/auth', {
+        await userAPI.get('/auth', {
           headers: {
             Authorization: token,
           },
@@ -43,14 +45,14 @@ export default function Search() {
     setListAlbum(response);
     setAlbumName(album);
     setIsLoading(false);
-    setAlbumName('');
     setNotFoundAlbum(response.length === 0);
+    setAlbum('');
   };
 
   const onChangeInput = ({ target }) => {
-    const { value, name } = target;
+    const { value } = target;
     const minLength = 2;
-    setAlbum({ [name]: value });
+    setAlbum(value);
     setIsDisabledSearch(value.length < minLength);
   };
 
@@ -59,42 +61,30 @@ export default function Search() {
       <Header active="search" />
       {!isLoading && (
         <form onSubmit={ handleSearch }>
-          <label htmlFor="search-artist-input">
-            <input
-              onChange={ onChangeInput }
-              name="album"
-              type="text"
-              id="search-artist-input"
-              value={ album }
-            />
-          </label>
-          <button type="submit" disabled={ isDisabledSearch }>Buscar</button>
+          <Input
+            id="imput-search"
+            onChangeInput={ onChangeInput }
+            placeholder="Nome do artista"
+            type="text"
+            name="album"
+            value={ album }
+          />
+          <Button isDisabled={ isDisabledSearch }>Buscar</Button>
         </form>
-
-      // <Form
-      //   title="Album"
-      //   inputId="search-artist-input"
-      //   buttonId="search-artist-button"
-      //   placeholder="Nome do artista"
-      //   onSubmit={  }
-      //   isDisabled={ isDisabledSearch }
-      //   onChangeInput={ onChangeInput }
-      //   value={ album }
-      //   isSearch
-      // >
-      //   Buscar
-      // </Form>
-      ) }
-      { isLoading && (<Loading />) }
+      )}
+      {isLoading && <Loading />}
       <p>
         Resultado de álbuns de:
-        { ` ${albumName}` }
+        {` ${albumName}`}
       </p>
       <div className="cards">
-        { notFoundAlbum ? (<h2>Nenhum álbum foi encontrado</h2>)
-          : (<LinksAlbum listAlbum={ listAlbum } />) }
+        {notFoundAlbum ? (
+          <h2>Nenhum álbum foi encontrado</h2>
+        ) : (
+          <LinksAlbum listAlbum={ listAlbum } />
+        )}
       </div>
-      { redirect && (<Redirect to="/" />) }
+      {redirect && <Redirect to="/" />}
     </div>
   );
 }

@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
 import { Redirect } from 'react-router-dom';
-import reservationAPI from '../../services/userAPI';
 import Input from '../../components/Input/Input';
 import Button from '../../components/Button/Button';
 import './Signin.css';
+import userApi from '../../services/userAPI';
 
 export default class Signin extends Component {
   constructor() {
@@ -43,7 +43,7 @@ export default class Signin extends Component {
     event.preventDefault();
     try {
       const { user } = this.state;
-      const response = await reservationAPI.post('/users', user);
+      const response = await userApi.post('/users', user);
       if (response) return this.setState({ redirect: true });
     } catch (error) {
       console.error(error);

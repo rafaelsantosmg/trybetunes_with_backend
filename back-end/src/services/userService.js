@@ -9,7 +9,9 @@ const getAll = async () => {
 };
 
 const getById = async (id) => {
-  const user = await User.findByPk(id);
+  const user = await User.findByPk(id, {
+    attributes: { exclude: ['id', 'password', 'createdAt', 'updatedAt'] },
+  });
   if (!user) throw throwError(404, 'User not foud');
 
   return user;

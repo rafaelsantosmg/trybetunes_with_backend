@@ -1,29 +1,31 @@
 import React from 'react';
-import propTypes from 'prop-types';
+import PropTypes from 'prop-types';
 
 export default function Input({ id, onChangeInput, placeholder, type, name, value }) {
   return (
-    <input
-      data-testid={ id }
-      type={ type }
-      name={ name }
-      value={ value }
-      className="form-control"
-      placeholder={ placeholder }
-      aria-label="Username"
-      aria-describedby="basic-addon1"
-      onChange={ onChangeInput }
-    />
+    <label htmlFor={ id }>
+      <input
+        id={ id }
+        type={ type }
+        name={ name }
+        value={ value }
+        className="form-control"
+        placeholder={ placeholder }
+        aria-label="Username"
+        aria-describedby="basic-addon1"
+        onChange={ onChangeInput }
+      />
+    </label>
   );
 }
 
 Input.propTypes = {
-  id: propTypes.string,
-  name: propTypes.string,
-  value: propTypes.string,
-  type: propTypes.string,
-  placeholder: propTypes.string,
-  onChangeInput: propTypes.func,
+  id: PropTypes.string,
+  name: PropTypes.string,
+  value: PropTypes.string,
+  type: PropTypes.string,
+  placeholder: PropTypes.string,
+  onChangeInput: PropTypes.func,
 };
 
 Input.defaultProps = {

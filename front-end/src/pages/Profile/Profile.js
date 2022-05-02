@@ -1,18 +1,30 @@
-import React, { useEffect, useState, useContext } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-
+import userApi, { readUser } from '../../services/userAPI';
 import Header from '../../components/Header/Header';
 import Loading from '../../components/Loading/Loading';
-import UserContext from '../../context/UserContext';
 import './Profile.css';
 
 export default function Profile() {
-  const user = useContext(UserContext);
+  const [user, setUser] = useState({});
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    if (user) setIsLoading(false);
-  }, [user]);
+    const { id, token } = readUser();
+    try {
+      const getUser = async () => {
+        const response = await userApi.get(`/users/${id}`, {
+          headers: { Authorization: token },
+        });
+        setUser(response.data);
+      };
+      getUser();
+      if (user) setIsLoading(false);
+    } catch (err) {
+      console.error(err);
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return (
     <div className="page-profile" data-testid="page-profile">

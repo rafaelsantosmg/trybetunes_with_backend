@@ -4,7 +4,7 @@ import UserContext from './UserContext';
 import userApi from '../services/userAPI';
 
 const UserProvider = ({ children }) => {
-  const [user, setUser] = useState([]);
+  const [user, setUser] = useState({});
 
   useEffect(() => {
     const getUser = async () => {
@@ -22,9 +22,9 @@ const UserProvider = ({ children }) => {
     };
     getUser();
   }, []);
-  // console.log(user);
+
   return (
-    <UserContext.Provider value={ user }>
+    <UserContext.Provider value={ { user, setUser } }>
       {children}
     </UserContext.Provider>);
 };

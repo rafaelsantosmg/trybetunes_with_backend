@@ -24,7 +24,6 @@ export default function Login() {
     const STATUS_CODE = 400;
     try {
       const response = await userAPI.post('/login', user);
-      console.log(response);
       saveUser(response.data.user.id, response.data.user.userName, response.data.token);
       if (response.data.token) return history.push('/search');
     } catch (err) {

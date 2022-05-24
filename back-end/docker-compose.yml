@@ -1,32 +1,35 @@
-version: '3.1'
+version: "3"
+
 services:
-  mysql:
-    image: mysql:5.7
-    container_name: trybetunes_mysql
-    restart: always
+  node:
+    image: node:latest
+    working_dir: /app
+    volumes:
+      - ./:/app
+    container_name: trybetunes_api
+    tty: true
+    stdin_open: true
+    command: bash
+    depends_on:
+      - db
     env_file:
       - ./.env
-    environment:
-      - MYSQL_ROOT_PASSWORD=$MYSQL_PASSWORD
-    ports:
-      - $DB_PORT:3306
-    volumes:
-      - .:/app/db
-    working_dir: /app/db
-  api:
-    image: node:latest
-    container_name: trybetunes_api
-    restart: always
-    depends_on:
-      - mysql      
     ports:
       - $API_PORT:$API_PORT
-    environment:      
-      - MYSQL_DATABASE=$MYSQL_DATABASE
+    environment:
       - MYSQL_USER=$MYSQL_USER
       - MYSQL_PASSWORD=$MYSQL_PASSWORD
-      - HOSTNAME=mysql      
-    volumes:
-      - .:/app/api
-    working_dir: /app/api
-    command: bash -c "npm install && npm start"
+      - MYSQL_DATABASE=$MYSQL_DATABASE
+      - JWT_SECRET=$JWT_SECRET
+  db:
+    container_name: trybetunes_db
+    image: mysql:5.7
+    platform: linux/x86_64
+    ports:
+      - $DB_PORT:$DB_PORT
+    environment:
+      - MYSQL_ROOT_PASSWORD=$MYSQL_PASSWORD
+
+networks:
+  default:
+    name: trybe_tunes

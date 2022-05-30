@@ -1,0 +1,23 @@
+.page-album {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  margin: 20px auto;
+  width: 90%;
+}
+
+.album-content {
+  align-self: center;
+  display: flex;
+  margin: 40px 0;
+  width: 80%;
+}
+
+.album-image {
+  width: 40%;
+}
+
+.album-title {
+  flex-direction: row;
+  width: 60%;
+}

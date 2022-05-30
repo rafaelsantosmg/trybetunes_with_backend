@@ -1,0 +1,27 @@
+.music-card {
+  display: flex;
+  flex-direction: column;
+  margin-top: 20px;
+}
+
+.music-track {
+  align-content: center;
+  align-items: center;
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  margin: 10px 0;
+}
+
+.music-track p {
+  width: 20%;
+}
+
+.music-track audio {
+  margin: 0 40px;
+  width: 40%;
+}
+
+.form-check {
+  width: 10%;
+}
